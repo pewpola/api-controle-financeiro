@@ -21,6 +21,11 @@ defmodule FinanceControl.Transactions do
     Repo.all(Transaction)
   end
 
+  def list_user_transactions(user_id) do
+    Repo.all(from t in Transaction, where: t.user_id == ^user_id, preload: [:tags])
+  end
+
+
   @doc """
   Gets a single transaction.
 

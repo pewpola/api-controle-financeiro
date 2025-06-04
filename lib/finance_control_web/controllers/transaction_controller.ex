@@ -3,20 +3,29 @@ defmodule FinanceControlWeb.TransactionController do
 
   alias FinanceControl.Transactions
   alias FinanceControl.Transactions.Transaction
+  alias FinanceControl.Guardian
 
   action_fallback FinanceControlWeb.FallbackController
 
   def index(conn, _params) do
-    transactions = Transactions.list_transactions()
-    render(conn, :index, transactions: transactions)
+    with %FinanceControl.Accounts.User{id: user_id} <- Guardian.Plug.current_resource(conn) do
+      transactions = Transactions.list_user_transactions(user_id)
+      render(conn, :index, transactions: transactions)
+    else
+      _ -> {:error, :unauthorized}
+    end
   end
 
   def create(conn, %{"transaction" => transaction_params}) do
-    with {:ok, %Transaction{} = transaction} <- Transactions.create_transaction(transaction_params) do
+    with %FinanceControl.Accounts.User{id: user_id} <- Guardian.Plug.current_resource(conn),
+         params <- Map.put(transaction_params, "user_id", user_id),
+         {:ok, %Transaction{} = transaction} <- Transactions.create_transaction(params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/transactions/#{transaction}")
       |> render(:show, transaction: transaction)
+    else
+      _ -> {:error, :unauthorized}
     end
   end
 
@@ -28,8 +37,8 @@ defmodule FinanceControlWeb.TransactionController do
   def update(conn, %{"id" => id, "transaction" => transaction_params}) do
     transaction = Transactions.get_transaction!(id)
 
-    with {:ok, %Transaction{} = transaction} <- Transactions.update_transaction(transaction, transaction_params) do
-      render(conn, :show, transaction: transaction)
+    with {:ok, %Transaction{} = updated} <- Transactions.update_transaction(transaction, transaction_params) do
+      render(conn, :show, transaction: updated)
     end
   end
 

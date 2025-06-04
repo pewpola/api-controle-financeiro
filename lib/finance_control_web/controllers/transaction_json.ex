@@ -21,7 +21,10 @@ defmodule FinanceControlWeb.TransactionJSON do
       description: transaction.description,
       value: transaction.value,
       type: transaction.type,
-      date: transaction.date
+      date: transaction.date,
+      user_id: transaction.user_id,
+      inserted_at: transaction.inserted_at,
+      updated_at: transaction.updated_at
     }
   end
 end

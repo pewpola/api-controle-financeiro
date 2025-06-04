@@ -18,7 +18,9 @@ defmodule FinanceControlWeb.TagJSON do
   defp data(%Tag{} = tag) do
     %{
       id: tag.id,
-      name: tag.name
+      name: tag.name,
+      inserted_at: tag.inserted_at,
+      updated_at: tag.updated_at
     }
   end
 end
