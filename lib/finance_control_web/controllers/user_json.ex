@@ -25,4 +25,19 @@ defmodule FinanceControlWeb.UserJSON do
       updated_at: user.updated_at
     }
   end
+
+  def auth(%{user: user, token: token}) do
+    %{
+      data: %{
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        password_hash: user.password_hash,
+        inserted_at: user.inserted_at,
+        updated_at: user.updated_at,
+        token: token
+      }
+    }
+  end
+
 end

@@ -17,13 +17,15 @@ defmodule FinanceControlWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
+    with {:ok, %User{} = user} <- Accounts.create_user(user_params),
+        {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/users/#{user}")
-      |> render(:show, user: sanitize_user(user))
+      |> render("auth.json", %{user: user, token: token})
     end
   end
+
 
   def show(conn, %{"id" => id}) do
     with %User{} <- Guardian.Plug.current_resource(conn),

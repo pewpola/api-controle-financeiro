@@ -19,14 +19,14 @@ defmodule FinanceControlWeb.Router do
   scope "/api", FinanceControlWeb do
     pipe_through :api
 
-    post "/register", AuthController, :register
     post "/login", AuthController, :login
+    post "/users", UserController, :create
   end
 
   scope "/api", FinanceControlWeb do
     pipe_through :api_auth
 
-    resources "/users", UserController, except: [:new, :edit]
+    resources "/users", UserController, except: [:new, :edit, :create]
     resources "/transactions", TransactionController, except: [:new, :edit]
     resources "/tags", TagController, except: [:new, :edit]
   end
