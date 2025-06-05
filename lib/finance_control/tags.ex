@@ -21,6 +21,10 @@ defmodule FinanceControl.Tags do
     Repo.all(Tag)
   end
 
+  def list_user_tags(user_id) do
+    Repo.all(from t in Tag, where: t.user_id == ^user_id)
+  end
+
   @doc """
   Gets a single tag.
 

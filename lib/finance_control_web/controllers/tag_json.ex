@@ -19,8 +19,10 @@ defmodule FinanceControlWeb.TagJSON do
     %{
       id: tag.id,
       name: tag.name,
+      user_id: tag.user_id,
       inserted_at: tag.inserted_at,
       updated_at: tag.updated_at
     }
   end
+  
 end
