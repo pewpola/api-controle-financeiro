@@ -9,7 +9,9 @@ defmodule FinanceControlWeb.Router do
     plug :accepts, ["json"]
     plug Guardian.Plug.Pipeline,
       module: FinanceControl.Guardian,
-      error_handler: FinanceControlWeb.AuthErrorHandler
+      error_handler: FinanceControlWeb.AuthErrorHandler,
+      claims: %{"typ" => "access"},
+      key: :default
 
     plug Guardian.Plug.VerifyHeader
     plug Guardian.Plug.EnsureAuthenticated
