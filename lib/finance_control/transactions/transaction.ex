@@ -8,7 +8,6 @@ defmodule FinanceControl.Transactions.Transaction do
     field :description, :string
     field :value, :decimal
     field :type, :string
-    # field :date, :naive_datetime
     belongs_to :user, FinanceControl.Accounts.User
     many_to_many :tags, FinanceControl.Tags.Tag, join_through: "transactions_tags"
 
